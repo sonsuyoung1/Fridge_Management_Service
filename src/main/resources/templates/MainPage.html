@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><title>식재료 관리</title><link rel="stylesheet" href="/common.css"><link rel="stylesheet" href="/MainPage.css"></head>
+<body><div class="container">
+<div class="page-head"><div><a href="/refrigerator">← 냉장고 목록</a><h2 th:text="${fridge.fridgeName} + ' 식재료'">식재료</h2></div><a class="button" th:href="@{/ingredient/add(fridgeId=${fridge.fridgeId})}">재료 추가</a></div>
+<div class="toolbar"><input id="searchInput" type="text" placeholder="재료명을 검색하세요." oninput="filterRows()"></div>
+<table class="ingredient-table"><thead><tr><th>재료명</th><th>보관 위치</th><th>유통기한</th><th>분류</th><th>수량</th><th>상태</th><th>관리</th></tr></thead>
+<tbody id="ingredientBody">
+<tr th:each="ing : ${ingredientList}" th:attr="data-name=${ing.name}">
+<td th:text="${ing.name}">토마토</td><td th:text="${ing.storageType}">냉장</td><td th:text="${ing.expirationDate}">2025-12-05</td><td th:text="${ing.category}">채소</td><td th:text="${ing.quantity}">5</td>
+<td th:with="days=${T(java.time.temporal.ChronoUnit).DAYS.between(today, ing.expirationDate)}">
+<span th:if="${days >= 7}" class="status safe" th:text="'안전 D-' + ${days}"></span>
+<span th:if="${days < 7 and days >= 4}" class="status warning" th:text="'주의 D-' + ${days}"></span>
+<span th:if="${days < 4 and days >= 0}" class="status urgent" th:text="${days == 0 ? '당일' : '임박 D-' + days}"></span>
+<span th:if="${days < 0}" class="status expired">만료</span>
+</td>
+<td><div class="row-actions"><a class="button" th:href="@{'/ingredient/edit/' + ${ing.id}}">수정</a><form th:action="@{'/ingredient/delete/' + ${ing.id}}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')"><button class="danger" type="submit">삭제</button></form></div></td>
+</tr>
+</tbody></table>
+</div>
+<script>function filterRows(){const q=document.getElementById('searchInput').value.toLowerCase();document.querySelectorAll('#ingredientBody tr').forEach(r=>r.style.display=(r.dataset.name||'').toLowerCase().includes(q)?'':'none')}</script>
+</body></html>
