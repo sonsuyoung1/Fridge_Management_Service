@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><title>회원가입</title><link rel="stylesheet" href="/common.css"><link rel="stylesheet" href="/register.css"></head>
+<body><div class="container register-wrap"><div class="card">
+<h2>회원가입</h2>
+<form action="/register" method="post" class="register-form">
+<div><div class="field-row"><input type="text" id="username" name="username" placeholder="아이디" required><button type="button" onclick="checkDuplicateId()">중복 확인</button></div><p id="idCheckResult" class="check-message"></p></div>
+<div><div class="field-row"><input type="email" id="email" name="email" placeholder="이메일" required><button type="button" onclick="checkDuplicateEmail()">중복 확인</button></div><p id="emailCheckResult" class="check-message"></p></div>
+<input type="text" name="name" placeholder="이름" required><input type="password" id="password" name="password" placeholder="비밀번호" required oninput="validatePasswords()"><input type="password" id="confirm" name="confirm" placeholder="비밀번호 확인" required oninput="validatePasswords()"><p id="pwCheckResult" class="check-message"></p><button type="submit">가입하기</button>
+</form><p th:if="${error}" th:text="${error}" class="error-msg"></p><p><a href="/">로그인으로 돌아가기</a></p>
+</div></div>
+<script>
+async function checkDuplicateId(){const v=document.getElementById('username').value.trim(),r=document.getElementById('idCheckResult');if(!v){r.textContent='아이디를 입력하세요.';return}const d=await(await fetch('/check-username?username='+encodeURIComponent(v))).text();r.textContent=d==='ok'?'사용 가능한 아이디입니다.':'이미 사용 중인 아이디입니다.'}
+async function checkDuplicateEmail(){const v=document.getElementById('email').value.trim(),r=document.getElementById('emailCheckResult');if(!v){r.textContent='이메일을 입력하세요.';return}const d=await(await fetch('/check-email?email='+encodeURIComponent(v))).text();r.textContent=d==='ok'?'사용 가능한 이메일입니다.':'이미 등록된 이메일입니다.'}
+function validatePasswords(){const p=document.getElementById('password').value,c=document.getElementById('confirm').value,r=document.getElementById('pwCheckResult');r.textContent=p&&c?(p===c?'비밀번호가 일치합니다.':'비밀번호가 일치하지 않습니다.') : ''}
+</script></body></html>

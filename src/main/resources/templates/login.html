@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><title>냉장고 재료 유통기한 관리</title><link rel="stylesheet" href="/common.css"><link rel="stylesheet" href="/login.css"></head>
+<body><div class="container login-wrap"><div class="card">
+<h2>❄️ 냉장고 재료 유통기한 관리</h2>
+<form action="/login" method="post" class="login-form"><input type="text" name="username" placeholder="아이디" required><input type="password" name="password" placeholder="비밀번호" required><button type="submit">로그인</button></form>
+<p th:if="${error}" th:text="${error}" class="error-msg"></p>
+<div class="find-links"><a href="/find/id">아이디 찾기</a><span> | </span><a href="/find/password">비밀번호 찾기</a></div>
+<p class="register-link">계정이 없으신가요? <a href="/register">회원가입</a></p>
+</div></div></body></html>
