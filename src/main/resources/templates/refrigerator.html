@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><title>냉장고 목록</title><link rel="stylesheet" href="/common.css"><link rel="stylesheet" href="/refrigerator.css"></head>
+<body><div class="container">
+<div class="top-bar"><div><h2 th:text="'❄️ ' + ${user.name} + ' 님의 냉장고 목록'">냉장고 목록</h2><p>냉장고를 선택해 식재료와 유통기한을 관리하세요.</p></div><div class="actions"><a class="button" href="/add-fridge">냉장고 추가</a><a class="button secondary" href="/user/settings">설정</a><a class="button danger" href="/logout">로그아웃</a></div></div>
+<div class="fridge-list">
+<div th:if="${#lists.isEmpty(fridgeList)}" class="empty-text">현재 등록된 냉장고가 없습니다.<br>냉장고를 추가해보세요.</div>
+<div th:each="f : ${fridgeList}" class="fridge-card">
+<h3 th:text="${f.fridgeName}">거실 냉장고</h3><span th:text="${f.fridgeType}">일반 냉장고</span>
+<a th:href="@{/MainPage(fridgeId=${f.fridgeId})}"><div class="fridge-body">🧊</div></a>
+<div class="actions"><a class="button" th:href="@{'/fridge/edit/' + ${f.fridgeId}}">수정</a><form th:action="@{'/fridge/delete/' + ${f.fridgeId}}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')"><button class="danger" type="submit">삭제</button></form></div>
+</div></div></div>
+<script>const p=new URLSearchParams(location.search);if(p.get('saved')==='true')alert('저장되었습니다.');</script>
+</body></html>
