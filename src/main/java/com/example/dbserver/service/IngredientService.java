@@ -69,6 +69,7 @@ public class IngredientService {
                 .filter(i -> i.getUser().getUserId().equals(user.getUserId()))
                 .orElseThrow(() -> new IllegalArgumentException("삭제 권한이 없습니다."));
 
+        alarmService.deleteIngredientAlarm(id);
         ingredientRepository.delete(ingredient);
     }
 }
